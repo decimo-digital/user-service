@@ -8,12 +8,16 @@ import it.decimo.user_service.dto.RegistrationDto;
 import it.decimo.user_service.dto.responses.BasicResponse;
 import it.decimo.user_service.dto.responses.UserInfoResponse;
 import it.decimo.user_service.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
 
@@ -40,8 +44,9 @@ public class UserController {
             @ApiResponse(responseCode = "422", description = "La registrazione è fallita", content = @Content(schema = @Schema(implementation = BasicResponse.class)))
     })
     public ResponseEntity<Object> register(@RequestBody RegistrationDto body) {
-        final var registerd = userService.register(body);
-        if (registerd) {
+        logger.info("Registering new user with id {}", body.getId());
+        final var registered = userService.register(body);
+        if (registered) {
             return ResponseEntity.ok(new BasicResponse("Registration completed", "REGISTRATION_COMPLETED"));
         } else {
             return ResponseEntity.unprocessableEntity().body(new BasicResponse("Failed to register user", "REGISTRATION_FAILED"));
