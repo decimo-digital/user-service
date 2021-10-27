@@ -26,7 +26,19 @@ public class UserRepository {
     public UserInfoResponse getUserInfoById(int id) {
         final var query = "SELECT id, first_name, last_name, email, phone, propic, referral FROM user_identity WHERE id = ?";
         try {
-            return jdbcTemplate.queryForObject(query, UserInfoResponse.class, id);
+            return jdbcTemplate.query(query, row -> {
+                row.next();
+                
+                return UserInfoResponse.builder()
+                        .id(row.getInt("id"))
+                        .firstName(row.getString("first_name"))
+                        .lastName(row.getString("last_name"))
+                        .email(row.getString("email"))
+                        .phone(row.getString("phone"))
+                        .propic(row.getString("propic"))
+                        .referral(row.getString("referral"))
+                        .build();
+            }, id);
         } catch (Exception e) {
             logger.error("Got error while retrieving user {}", id, e);
             return null;
