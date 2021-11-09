@@ -1,0 +1,21 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build . --tag smaso/userservice:latest
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Publish docker image to docker hub
+      run: docker push smaso/userservice:latest
+      
