@@ -34,21 +34,7 @@ public class UserController {
         if (id == null) {
             return ResponseEntity.badRequest().body(new BasicResponse("Missing email", "NO_EMAIL_IN_REQUEST"));
         }
+        log.info("Getting info of id {}", id);
         return ResponseEntity.ok(userService.getAuthUser(id));
-    }
-
-    @PostMapping("/register")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "La registrazione è andata a buon fine", content = @Content(schema = @Schema(implementation = BasicResponse.class))),
-            @ApiResponse(responseCode = "422", description = "La registrazione è fallita", content = @Content(schema = @Schema(implementation = BasicResponse.class))) })
-    public ResponseEntity<Object> register(@RequestBody AuthUser body) {
-        log.info("Registering new user with id {}", body.getId());
-        final var registered = userService.register(body);
-        if (registered != null) {
-            return ResponseEntity.ok(new BasicResponse("Registration completed", "REGISTRATION_COMPLETED"));
-        } else {
-            return ResponseEntity.unprocessableEntity()
-                    .body(new BasicResponse("Failed to register user", "REGISTRATION_FAILED"));
-        }
     }
 }
