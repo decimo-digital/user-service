@@ -3,7 +3,7 @@ package it.decimo.user_service.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.decimo.user_service.model.UserInfo;
+import it.decimo.user_service.model.AuthUser;
 import it.decimo.user_service.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +21,7 @@ public class UserService {
     /**
      * Recupera le informazioni dell'utente
      */
-    public UserInfo getUserInfo(int id) {
+    public AuthUser getAuthUser(int id) {
         final var user = userRepository.findById(id);
         if (!user.isPresent()) {
             log.info("User of id {} doesn't exists", id);
@@ -32,7 +32,7 @@ public class UserService {
     /**
      * Registra una nuova utenza
      */
-    public UserInfo register(UserInfo dto) {
+    public AuthUser register(AuthUser dto) {
         return userRepository.save(dto);
     }
 }
